@@ -26,9 +26,14 @@ mongoose
 // routes
 const orderRouter = require("./routes/order");
 const productRouter = require("./routes/product");
+const imageRouter = require("./routes/image");
 
 app.use("/orders", orderRouter);
 app.use("/products", productRouter);
+app.use("/images", imageRouter);
+
+//set the uploads folder as static path
+app.use("/uploads", express.static("uploads"));
 
 app.get("/", (req, res) => {
   res.send("E-Commerce");
