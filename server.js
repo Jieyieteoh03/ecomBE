@@ -27,10 +27,12 @@ mongoose
 const orderRouter = require("./routes/order");
 const productRouter = require("./routes/product");
 const imageRouter = require("./routes/image");
+const paymentRouter = require("./routes/payment");
 
 app.use("/orders", orderRouter);
 app.use("/products", productRouter);
 app.use("/images", imageRouter);
+app.use("/payment", paymentRouter);
 
 //set the uploads folder as static path
 app.use("/uploads", express.static("uploads"));
