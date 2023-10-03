@@ -10,7 +10,10 @@ const {
   BILLPLZ_COLLECTION_ID,
 } = require("../config");
 
-router.get("/", async (req, res) => {
+const authMiddleware = require("../middleware/auth");
+const isAdminMiddleware = require("../middleware/isAdmin");
+
+router.get("/", authMiddleware, async (req, res) => {
   try {
     const { status } = req.query;
     let filter = {};
@@ -18,7 +21,14 @@ router.get("/", async (req, res) => {
     if (status) {
       filter.status = status;
     }
-    res.status(200).send(await Order.find(filter).populate("products"));
+    console.log(req.user);
+    //only user will have this filter
+    if (req.user && req.user.role === "user") {
+      filter.customerEmail = req.user.email;
+    }
+    res
+      .status(200)
+      .send(await Order.find(filter).populate("products").sort({ _id: -1 }));
   } catch (error) {
     res.status(400).send({ message: "Order not found" });
   }
@@ -76,7 +86,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", isAdminMiddleware, async (req, res) => {
   try {
     const order_id = req.params.id;
 
@@ -89,7 +99,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", isAdminMiddleware, async (req, res) => {
   try {
     const order_id = req.params.id;
 

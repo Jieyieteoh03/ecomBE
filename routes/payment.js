@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
 
     //compare signature
     if (billplz_x_signature !== x_signature) {
-      res.status(400).send({ message: "Signature not valid" });
+      return res.status(400).send({ message: "Signature not valid" });
     }
 
     //signature correct, then proceed
@@ -32,7 +32,7 @@ router.post("/", async (req, res) => {
 
     //if order not found, return error
     if (!order) {
-      res.status(400).send({ message: "Order not found" });
+      return res.status(400).send({ message: "Order not found" });
     }
 
     //if order is found, update to order status to paid
